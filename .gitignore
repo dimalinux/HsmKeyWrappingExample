@@ -39,3 +39,7 @@ nbproject/
 
 # Mac files
 .DS_Store
+
+# Overrides
+!**/gradle/wrapper/*.jar
+!**/gradle/wrapper/*.properties
