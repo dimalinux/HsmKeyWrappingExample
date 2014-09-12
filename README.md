@@ -6,7 +6,7 @@ need to manage more by saving encrypted host keys, the Luna SA is problematic.
 
 With the Luna EFT HSM you can do crypto operations directly with encrypted
 host keys.  The HSM does not even provide a transformation to convert an
-encrypted host key back to it's unencrytped form.  The transactions are like
+encrypted host key back to its unencrytped form.  The transactions are like
 this:
 
   Client sends: (encryptedHostKey, operation, inputData)
