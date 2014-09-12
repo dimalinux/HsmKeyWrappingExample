@@ -19,20 +19,22 @@ first decrypt the key.  This example looks at the options available.
 
 ## How to use this code
 
-1. Create a test partition on your HSM and record the partion name and password.
+(1) Create a test partition on your HSM and record the partion name and password.
 
-2. Create a partition.properties file in your home directory with the following
-two properties:
-  ```
-  partitionName = YourPartitionName
-  partitionPass = PasswordForYourTestPartition
-  ```
-3. From a Linux HSM client host with the Luna SA JSP client software installed:
-  ```
-  $ git clone https://github.com/dimalinux/HsmKeyWrappingExample.git
-  $ cd HsmKeyWrappingExample
-  $ ./gradlew clean run
-  # Or:
-  $ ./gradlew clean build
-  $ java -Djava.library.path=/usr/lunasa/jsp/lib -cp build/libs/HsmKeyWrappingExample.jar:/usr/lunasa/jsp/lib/LunaProvider.jar to.noc.hsm.lunasa.example.KeyWrappingExample
-  ```
+(2) Create a partition.properties file in your home directory with the following
+two properties: 
+```
+partitionName = YourPartitionName
+partitionPass = PasswordForYourTestPartition
+```
+
+(3) From a Linux HSM client host with the Luna SA JSP client software installed:
+```
+$ git clone https://github.com/dimalinux/HsmKeyWrappingExample.git
+$ cd HsmKeyWrappingExample
+
+$ ./gradlew clean run
+# Or:
+$ ./gradlew clean build
+$ java -Djava.library.path=/usr/lunasa/jsp/lib -cp build/libs/HsmKeyWrappingExample.jar:/usr/lunasa/jsp/lib/LunaProvider.jar to.noc.hsm.lunasa.example.KeyWrappingExample
+```
