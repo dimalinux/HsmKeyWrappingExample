@@ -8,9 +8,8 @@ With the Luna EFT HSM you can do crypto operations directly with encrypted
 host keys.  The HSM does not even provide a transformation to convert an
 encrypted host key back to its unencrytped form.  The transactions are like
 this:
-
-  Client sends: (encryptedHostKey, operation, inputData)
-  HSM returns:  transformed result
+* Client sends: (encryptedHostKey, operation, inputData)
+* HSM returns:  transformed result
   
 The Luna SA is problematic.  You can create your own KEK (key encryption key)
 on the HSM, but in order to use an encrypted host key created by it, you must
