@@ -1,0 +1,41 @@
+# Generated files
+gen/
+bin/
+build/
+target/
+classes/
+*.log
+local.properties
+*.class
+*.jar
+*.war
+*.ear
+*.apk
+*.ap_
+*.dex
+.gradle/
+
+# Backup files
+*~
+*.bak
+*.orig
+*.swp
+
+# Android Studio and Intellij IDEA config files
+.idea
+*.iml
+
+# Eclipse config files
+.settings
+.classpath
+.project
+.metadata
+
+# Netbeans config files
+nb-configuration.xml
+nbactions.xml
+.nb-gradle
+nbproject/
+
+# Mac files
+.DS_Store

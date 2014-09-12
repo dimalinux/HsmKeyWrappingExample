@@ -1,0 +1,25 @@
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+tasks.eclipse.dependsOn(cleanEclipse)
+
+mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingExample'
+sourceCompatibility = '1.7'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(
+        dir: '/usr/lunasa/jsp/lib/',
+        include: [
+                'LunaProvider.jar'//,
+                //'libLunaAPI.so'
+        ]
+    )
+}
+
+run {
+    systemProperty 'java.library.path', '/usr/lunasa/jsp/lib/'
+}

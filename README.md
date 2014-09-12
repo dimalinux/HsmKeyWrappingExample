@@ -19,12 +19,12 @@ first decrypt the key.  This example looks at the options available.
 
 ## How to use this code
 
-(1) Create a test partition on your HSM and record the partion name and password.
+(1) Create a test partition on your HSM and record the partition name and password.
 
 (2) Create a partition.properties file in your home directory with the following
 two properties: 
 ```
-partitionName = YourPartitionName
+partitionName = YourTestPartitionName
 partitionPass = PasswordForYourTestPartition
 ```
 
