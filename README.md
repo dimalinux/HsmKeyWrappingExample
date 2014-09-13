@@ -23,8 +23,7 @@ client. A Safenet representative pointed out that **after decrypting the key**
 we can inject the key into the HSM for the length of the session.  In an
 application that runs for hours or days, this would provide meaningful protection
 against memory attacks (reading memory of the applicaiton for keys), but in our
-use case the keys are used immedaitely before the JVM exits.  Injecting the key
-to the HSM takes longer than the crypto operations being performed in software.
+use case the keys are used immedaitely and then the JVM exits.
 
 ## How to use this code
 
