@@ -44,7 +44,7 @@ public class HsmManager {
         partitionPass = prop.getProperty("partitionPass");
         
         if (partitionName == null || partitionPass == null) {
-            System.err.println("Aborting, manditory properties not set");
+            System.err.println("Aborting, mandatory properties not set");
             System.exit(-1);
         }
     }
