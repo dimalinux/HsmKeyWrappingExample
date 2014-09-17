@@ -46,3 +46,7 @@ $ ./gradlew clean run
 $ ./gradlew clean build
 $ java -Djava.library.path=/usr/lunasa/jsp/lib -cp build/libs/HsmKeyWrappingExample.jar:/usr/lunasa/jsp/lib/LunaProvider.jar to.noc.hsm.lunasa.example.KeyWrappingExample
 ```
+
+4) To run the the alternate <i>KeyWrappingWithExtractableKeysExample</i>,
+swap the main class declared in the build.gradle file or the main class
+on the command line if invoking java directly.
