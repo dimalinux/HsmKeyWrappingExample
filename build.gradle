@@ -4,6 +4,7 @@ apply plugin: 'eclipse'
 tasks.eclipse.dependsOn(cleanEclipse)
 
 mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingExample'
+//mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingWithExtractableKeysExample'
 sourceCompatibility = '1.7'
 
 repositories {
@@ -11,13 +12,7 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(
-        dir: '/usr/lunasa/jsp/lib/',
-        include: [
-                'LunaProvider.jar'//,
-                //'libLunaAPI.so'
-        ]
-    )
+    compile fileTree(dir: '/usr/lunasa/jsp/lib/', include: 'LunaProvider.jar')
 }
 
 run {
