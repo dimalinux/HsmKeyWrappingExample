@@ -80,5 +80,9 @@ public class HsmManager {
     public static void deleteKey(String alias) throws KeyStoreException {
         keyStore.deleteEntry(alias);
     }
+
+    public static void setSecretKeysExtractable(boolean isExtractable) {
+        slotManager.setSecretKeysExtractable(isExtractable);
+    }
     
 }
