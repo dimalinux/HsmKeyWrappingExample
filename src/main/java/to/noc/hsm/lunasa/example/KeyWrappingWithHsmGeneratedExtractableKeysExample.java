@@ -103,21 +103,21 @@ public class KeyWrappingWithHsmGeneratedExtractableKeysExample {
         //  Unwrap the key
         //
         lunaAesCbcCipher.init(Cipher.UNWRAP_MODE, kek, FIXED_128BIT_IV_FOR_TESTS);
-        LunaKey key = (LunaKey)lunaAesCbcCipher.unwrap(wrappedKey, "AES", Cipher.SECRET_KEY);
-        out.println("Unwrapped key (in clear same as original): " + getHex(key.getEncoded()));
+        LunaKey unwrappedKey = (LunaKey)lunaAesCbcCipher.unwrap(wrappedKey, "AES", Cipher.SECRET_KEY);
+        out.println("Unwrapped key (in clear same as original): " + getHex(unwrappedKey.getEncoded()));
 
 
         //
         //  Encrypt data with unwrapped key
         //
-        lunaAesCbcCipher.init(Cipher.ENCRYPT_MODE, key, FIXED_128BIT_IV_FOR_TESTS);
+        lunaAesCbcCipher.init(Cipher.ENCRYPT_MODE, unwrappedKey, FIXED_128BIT_IV_FOR_TESTS);
         String plainTextStr = "SixteenByteClear";
         byte[] plainText = "SixteenByteClear".getBytes();
         byte[] cipherText = lunaAesCbcCipher.doFinal(plainText);
         out.println("Plain Text  ('" + plainTextStr + "'): " + getHex(plainText));
         out.println("Cipher Text: " + getHex(cipherText));
 
-        key.DestroyKey();
+        unwrappedKey.DestroyKey();
         HsmManager.logout();
     }
 
