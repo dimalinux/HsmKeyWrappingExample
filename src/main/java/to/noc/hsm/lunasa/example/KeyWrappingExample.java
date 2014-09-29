@@ -81,7 +81,7 @@ public class KeyWrappingExample {
 
         Cipher hsmCipher = Cipher.getInstance("DES/ECB/NoPadding", "LunaProvider");
         hsmCipher.init(Cipher.ENCRYPT_MODE, hsmInjectedDesKey);
-        byte[] hsmCipherText = cipher.doFinal(plainText);
+        byte[] hsmCipherText = hsmCipher.doFinal(plainText);
         elapsedMs = System.currentTimeMillis() - start;
         out.println("HSM encryption result (" + elapsedMs + "ms): " + getHex(hsmCipherText));
         //  ==== End HSM encryption operation ====
