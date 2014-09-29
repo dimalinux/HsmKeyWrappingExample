@@ -12,6 +12,8 @@ repositories {
 }
 
 dependencies {
+    compile 'com.google.guava:guava:18.0'              // provides Bytes.indexOf
+    compile 'org.apache.commons:commons-lang3:3.3.2'   // provides SerializationUtils
     compile fileTree(dir: '/usr/lunasa/jsp/lib/', include: 'LunaProvider.jar')
 }
 
