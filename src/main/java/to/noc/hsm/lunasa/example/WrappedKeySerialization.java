@@ -28,16 +28,16 @@ import static java.lang.System.out;
  *       0x0000000000000010
  *
  *   Initial Host Key (in the clear):
- *        0x5B756ED09B98F87A58790BB34A989143E5F7431FF41694D6
+ *        0x313DDA5BBA4F136B290BDFDCB9B33245311543EC15AD8645
  *
  *   Wrapping IV for Host Key:
- *        0x5B756ED09B98F87A58790BB34A989143E5F7431FF41694D6
+ *        0x653782F3BA649860
  *
  *   KEK Wrapped Host Key:
- *        0x12AED07A056ECF19F53D096FAAEE07D3350FA7725883F8EEE194A3D19FC88CF6
+ *        0x75102B24F1BD0F3DF80D14CA85276A3EC2B82FB1E8E87ACA0756EB5ACA13DBD8
  *
  *   Serialized Key Holder:
- *       0xACED000573720047746F2E6E6F632E68736D2E6C756E6173612E6578616D706C652E57726...
+ *       0xACED000573720047746F2E6E6F632E68736D2E6C756E6173612E6578616D70...
  *
  *   Index of IV in Serialized Data:
  *       227
@@ -48,14 +48,17 @@ import static java.lang.System.out;
  *   Index of Unencrypted Key in Serialized Data:
  *       -1
  *
+ *   Is unwrapped secret key null after deserialization?
+ *       true
+ *
  *   Deserialized and Unwrapped Host Key (same as original):
- *       0x5B756ED09B98F87A58790BB34A989143E5F7431FF41694D6
+ *       0x313DDA5BBA4F136B290BDFDCB9B33245311543EC15AD8645
  *
  *   Plain Text:
  *       0xDEADD00D8BADF00DDEADBABED15EA5ED
  *
  *   Cipher Text:
- *       0x08583359848B684086F83C66CFBD486D
+ *       0xA2162BBE595A50FE766E894EC0F6BD7F
  *
  *   Plain Text Decrypted:
  *       0xDEADD00D8BADF00DDEADBABED15EA5ED
@@ -116,7 +119,7 @@ public class WrappedKeySerialization {
         byte[] hostKeyWrappingIv =  new byte[8];
         new SecureRandom().nextBytes(hostKeyWrappingIv);
         out.println("Initial Host Key (in the clear):\n\t " + getHex(hostKeyUnencrypted.getEncoded()));
-        out.println("Wrapping IV for Host Key:\n\t "+ getHex(hostKeyUnencrypted.getEncoded()));
+        out.println("Wrapping IV for Host Key:\n\t "+ getHex(hostKeyWrappingIv));
 
         //
         //  Use the HSM to wrap our host key
@@ -128,6 +131,7 @@ public class WrappedKeySerialization {
         //  Put the encrypted host key in our serializable holder
         //
         SerializableKeyHolder keyHolder = new SerializableKeyHolder(hostKeyType, hostKeyWrappingIv, wrappedHostKey);
+        keyHolder.getSecretKey(); // force key unwrapping before serialization
 
 
         //
@@ -154,7 +158,7 @@ public class WrappedKeySerialization {
         //  Reconstitute (deserialize) the holder from the byte array
         //
         keyHolder = SerializationUtils.deserialize(serializedBytes);
-
+        out.println("Is unwrapped secret key null after deserialization?\n\t" + (keyHolder.secretKey == null));
         out.println("Deserialized and Unwrapped Host Key (same as original):\n\t" +
                 getHex(keyHolder.getSecretKey().getEncoded()));
 
