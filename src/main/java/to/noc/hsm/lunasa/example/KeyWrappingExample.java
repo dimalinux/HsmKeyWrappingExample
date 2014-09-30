@@ -28,6 +28,7 @@ public class KeyWrappingExample {
         final PrintStream out = System.out;
 
         HsmManager.login();
+        HsmManager.setSecretKeysExtractable(false);
 
         SecretKey kek = createNewHsmKek();
         out.println("HSM KEK ID: " + getHex(kek.getEncoded()));

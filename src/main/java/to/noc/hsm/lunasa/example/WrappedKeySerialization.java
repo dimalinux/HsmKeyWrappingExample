@@ -104,6 +104,7 @@ public class WrappedKeySerialization {
         final String hostKeyType = "DESede"; // 3 DES
 
         HsmManager.login();
+        HsmManager.setSecretKeysExtractable(false);
 
         //
         //  Create the HSM KEK (Key Encryption Key)
