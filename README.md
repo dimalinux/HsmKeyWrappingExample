@@ -19,11 +19,15 @@ this:
 The Luna SA is problematic.  You can create your own KEK (key encryption key)
 on the HSM, but in order to use an encrypted host key created by it, you must
 first decrypt the host key exposing the original unencrypted key value to the
-client. A Safenet representative pointed out that **after decrypting the key**
-we can inject the key into the HSM for the length of the session.  In an
-application that runs for hours or days, this would provide meaningful protection
-against memory attacks (reading memory of the applicaiton for keys), but in our
-use case the keys are used immedaitely and then the JVM exits.
+client.
+
+I've heard from a Safenet representative that I'm seeing this behavior due to
+a defect in Luna firmware version 5.1.  This version has a bug where any key
+unwrapped on the HSM is extractable.  (An impressive defect considering the
+cost of this device!)  Safenet claims release 5.2 and above fixes the issue, but
+the AWS CloudHSM version at the time of my writing is 5.1.2-2 so I am unable
+to confirm.
+
 
 ## How to use this code
 
