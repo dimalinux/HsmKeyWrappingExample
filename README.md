@@ -21,12 +21,12 @@ on the HSM, but in order to use an encrypted host key created by it, you must
 first decrypt the host key exposing the original unencrypted key value to the
 client.
 
-I've heard from a Safenet representative that I'm seeing this behavior due to
-a defect in Luna firmware version 5.1.  This version has a bug where any key
-unwrapped on the HSM is extractable.  (An impressive defect considering the
-cost of this device!)  Safenet claims release 5.2 and above fixes the issue, but
-the AWS CloudHSM version at the time of my writing is 5.1.2-2 so I am unable
-to confirm.
+**I've heard from Safenet that I'm seeing this behavior due to a defect in
+Luna firmware version 5.1.  This version has a bug where any key unwrapped
+on the HSM is extractable.  (An impressive defect considering the cost and
+purpose of this device!)  Safenet claims release 5.2 and above fixes the
+issue, but the AWS CloudHSM version at the time of my writing is 5.1.2-2
+so I am unable to confirm.**
 
 
 ## How to use this code
