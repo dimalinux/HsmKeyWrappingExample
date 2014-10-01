@@ -13,7 +13,7 @@ import java.util.Properties;
 
 /*
  *  This class looks for a file named "partition.properties" in the current
- *  user's come directory.  The file needs the following two properties:
+ *  user's home directory.  The file needs the following two properties:
  *
  *    partitionName = YourPartitionName
  *    partitionPass = PasswordForYourTestPartition
