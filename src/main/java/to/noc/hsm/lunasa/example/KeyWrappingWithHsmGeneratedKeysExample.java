@@ -44,7 +44,7 @@ import static java.lang.System.out;
 public class KeyWrappingWithHsmGeneratedKeysExample {
 
     //
-    //  AES-256 block size is 128 bits or 16 bytes.  Used easy HEX values so you can plug them
+    //  AES block size is 128 bits or 16 bytes.  Used easy HEX values so you can plug them
     //  into a website like http://aes.online-domain-tools.com/ to verify encrypted values.
     //
     private static final IvParameterSpec FIXED_128BIT_IV_FOR_TESTS = new IvParameterSpec(
@@ -61,7 +61,9 @@ public class KeyWrappingWithHsmGeneratedKeysExample {
         Cipher lunaAesCbcCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "LunaProvider");
 
         //
-        //  Generate a wrapping key (KEK: Key Encryption Key) using the Luna SA HSM
+        //  Generate a wrapping key (KEK: Key Encryption Key) using the Luna SA HSM.  If
+        //  you're using the LunaProvider on Windows, you may need to drop the AES key
+        //  size down to 128 bits.
         //
         lunaKeyGenerator.init(256);
         Key kek = lunaKeyGenerator.generateKey();
