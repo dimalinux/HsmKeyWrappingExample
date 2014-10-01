@@ -72,10 +72,10 @@ public class KeyWrappingExample {
         SecretKey kek = createNewHsmKek();
         out.println("HSM KEK ID (a handle, not in clear):\n\t" + getHex(kek.getEncoded()));
 
-        SecretKey desKey = createSoftwareKey(hostKeyType);
-        out.println("Software-Only 3DES Key (in the clear):\n\t" + getHex(desKey.getEncoded()));
+        SecretKey des3Key = createSoftwareKey(hostKeyType);
+        out.println("Software-Only 3DES Key (in the clear):\n\t" + getHex(des3Key.getEncoded()));
 
-        byte[] wrappedHostKey = wrapKeyWithKek(kek, desKey);
+        byte[] wrappedHostKey = wrapKeyWithKek(kek, des3Key);
         out.println("KEK wrapped 3DES key (host key):\n\t" + getHex(wrappedHostKey));
 
 
@@ -83,7 +83,7 @@ public class KeyWrappingExample {
         HsmManager.logout();
         out.println("Pretend that the host key was stored and restored from a database while disconnected\n");
         kek = null;
-        desKey = null;
+        des3Key = null;
         HsmManager.login();
 
         kek = getExistingHsmKek();
