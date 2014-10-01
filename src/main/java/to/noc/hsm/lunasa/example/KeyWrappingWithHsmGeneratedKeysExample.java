@@ -41,7 +41,7 @@ import static java.lang.System.out;
  *         0x2F5542DA100B07AF26262A8E31050E85A6F554397AC6EAE161769C93FDC6E81A
  *
  */
-public class KeyWrappingWithHsmGeneratedExtractableKeysExample {
+public class KeyWrappingWithHsmGeneratedKeysExample {
 
     //
     //  AES-256 block size is 128 bits or 16 bytes.  Used easy HEX values so you can plug them

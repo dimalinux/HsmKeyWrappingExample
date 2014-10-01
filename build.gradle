@@ -4,7 +4,8 @@ apply plugin: 'eclipse'
 tasks.eclipse.dependsOn(cleanEclipse)
 
 mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingExample'
-//mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingWithHsmGeneratedExtractableKeysExample'
+//mainClassName = 'to.noc.hsm.lunasa.example.WrappedKeySerializationExample'
+//mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingWithHsmGeneratedKeysExample'
 sourceCompatibility = '1.7'
 
 repositories {

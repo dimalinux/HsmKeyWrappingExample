@@ -63,7 +63,7 @@ import static java.lang.System.out;
  *   Plain Text Decrypted:
  *       0xDEADD00D8BADF00DDEADBABED15EA5ED
  */
-public class WrappedKeySerialization {
+public class WrappedKeySerializationExample {
 
     // Label used to store the the KEK (Key Encryption Key) on the HSM
     private static final String KEK_ALIAS = "KEK_3DES";
