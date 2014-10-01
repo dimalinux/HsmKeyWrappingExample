@@ -54,8 +54,12 @@ public class KeyWrappingExample {
     //
     private static final String KEK_ALIAS = "KEK_AES_TEST";
 
+    //  I had a report that the LunaProvider on Windows can't handle 256-bit AES, so I made it
+    //  a constant here which you can drop down to 128-bits.
+    private static int KEK_NUM_KEY_BITS = 256;
+
     //
-    //  AES-256 block size is 128 bits or 16 bytes.  Used easy HEX values so you can plug them
+    //  AES-* has a block size of 128 bits or 16 bytes.  Used easy HEX values so you can plug them
     //  into a website like http://aes.online-domain-tools.com/ to verify encrypted values.
     //
     private static final byte[] FIXED_128BIT_IV_FOR_TESTS =
@@ -93,7 +97,8 @@ public class KeyWrappingExample {
 
         //
         //  Give an example using using the unwrapped LunaSecretKey in both a software
-        //  cipher operation and an HSM cipher operation.
+        //  cipher operation and an HSM cipher operation.  If the LunaSecretKey was
+        //  protected in hardware, the SunJCE operation with it would fail.
         //
         String plainText = "12345678";
         byte[] plainTextBytes = plainText.getBytes();
@@ -127,7 +132,7 @@ public class KeyWrappingExample {
         }
 
         KeyGenerator kg = KeyGenerator.getInstance("AES", "LunaProvider");
-        kg.init(256);
+        kg.init(KEK_NUM_KEY_BITS);
 
         LunaSecretKey kek = (LunaSecretKey) kg.generateKey();
 
