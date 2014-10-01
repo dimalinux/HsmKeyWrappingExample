@@ -17,7 +17,7 @@ Encrption Key (KEK) is stored on the HSM to generate the encrypted host key.
 Ideally, the KEK can unwrap the encrypted host key on the HSM and allow
 the unwrapped key to be used in crypto operations, but never allow the HSM
 client to query back the unwrapped host key in the clear.  In my testing
-with the Luna SA 8000 provided by Amazon CloudHSM, I was unable to do this.
+with the Luna SA 8000 provided by Amazon CloudHSM, there is no way to do this.
 The HSM was always willing to give back the unwrapped key in the clear when
 calling *getEncoded()* on the key.
 
