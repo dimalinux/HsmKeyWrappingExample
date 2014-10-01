@@ -23,7 +23,7 @@ calling *getEncoded()* on the key.
 firmware.  This version has a bug where any key unwrapped on the HSM is
 extractable.  (An impressive defect considering the cost and purpose of this
 device!)  Safenet claims release 5.2 and above fixes the issue, but the AWS
-CloudHSM version at the time of my writing is 5.1.2-2 so I am unable to
+CloudHSM version at the time of this writing is 5.1.2-2 so I am unable to
 confirm.**
 
 
