@@ -3,7 +3,7 @@
 This code provides a simple example to play with key wrapping on the
 SafeNet Luna SA HSM provided by Amazon's AWS CloudHSM offering.
 
-## Why this is interesting
+## Why this is interesting?
 If you're only managing, say 20k keys, you can store them on the Luna SA HSM.
 Each key is physically stored on the HSM and accessed via a string label that
 you set.  If you need to manage more by saving encrypted host keys, the Luna
@@ -12,6 +12,8 @@ SA is problematic.
 If you need to manage a large number of keys, it is typically done by
 storing encrypted versions of those keys outside the HSM.  A Key
 Encrption Key (KEK) is stored on the HSM to generate the encrypted host key.
+
+## Severe issue with the AWS CloudHSM
 Ideally, the KEK can unwrap the encrypted host key on the HSM and allow
 the unwrapped key to be used in crypto operations, but never allow the HSM
 client to query back the unwrapped host key in the clear.  In my testing
