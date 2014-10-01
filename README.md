@@ -1,6 +1,6 @@
 # HsmKeyWrappingExample
 
-This code provides a simple example to play with key wrapping on the
+This code provides simple examples to play with key wrapping on the
 SafeNet Luna SA HSM provided by Amazon's AWS CloudHSM offering.
 
 ## Why this is interesting?
