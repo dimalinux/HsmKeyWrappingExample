@@ -54,8 +54,9 @@ public class KeyWrappingExample {
     //
     private static final String KEK_ALIAS = "KEK_AES_TEST";
 
-    //  I had a report that the LunaProvider on Windows can't handle 256-bit AES, so I made it
-    //  a constant here which you can drop down to 128-bits.
+    //  OpenJDK handles AES 256 just fine, but if you're using Oracle's JDK, it
+    //  may have strong crypto disabled requiring you to drop the key size below
+    //  down to 128.
     private static int KEK_NUM_KEY_BITS = 256;
 
     //

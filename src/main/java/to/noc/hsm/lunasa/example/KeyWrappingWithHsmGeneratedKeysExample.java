@@ -61,9 +61,10 @@ public class KeyWrappingWithHsmGeneratedKeysExample {
         Cipher lunaAesCbcCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "LunaProvider");
 
         //
-        //  Generate a wrapping key (KEK: Key Encryption Key) using the Luna SA HSM.  If
-        //  you're using the LunaProvider on Windows, you may need to drop the AES key
-        //  size down to 128 bits.
+        //  Generate a wrapping key (KEK: Key Encryption Key) using the Luna SA HSM.
+        //  OpenJDK handles AES 256 just fine, but if you're using Oracle's JDK, it
+        //  may have strong crypto disabled requiring you to drop the key size below
+        //  down to 128.
         //
         lunaKeyGenerator.init(256);
         Key kek = lunaKeyGenerator.generateKey();
