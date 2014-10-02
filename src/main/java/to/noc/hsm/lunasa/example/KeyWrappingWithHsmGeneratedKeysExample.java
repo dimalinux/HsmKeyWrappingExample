@@ -62,11 +62,10 @@ public class KeyWrappingWithHsmGeneratedKeysExample {
 
         //
         //  Generate a wrapping key (KEK: Key Encryption Key) using the Luna SA HSM.
-        //  OpenJDK handles AES 256 just fine, but if you're using Oracle's JDK, it
-        //  may have strong crypto disabled requiring you to drop the key size below
-        //  down to 128.
+        //  OpenJDK handles AES 256 just fine, but I had to back this down to 128 for
+        //  Oracle's JDK which, by default, has strong crypto disabled.
         //
-        lunaKeyGenerator.init(256);
+        lunaKeyGenerator.init(128);
         Key kek = lunaKeyGenerator.generateKey();
 
 

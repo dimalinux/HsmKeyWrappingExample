@@ -54,13 +54,12 @@ public class KeyWrappingExample {
     //
     private static final String KEK_ALIAS = "KEK_AES_TEST";
 
-    //  OpenJDK handles AES 256 just fine, but if you're using Oracle's JDK, it
-    //  may have strong crypto disabled requiring you to drop the key size below
-    //  down to 128.
-    private static int KEK_NUM_KEY_BITS = 256;
+    //  OpenJDK handles AES 256 just fine, but I had to lower this to 128 for
+    //  Oracle's off-the-shelf JDK which has strong crypto disabled.
+    private static int KEK_NUM_KEY_BITS = 128;
 
     //
-    //  AES-* has a block size of 128 bits or 16 bytes.  Used easy HEX values so you can plug them
+    //  AES has a block size of 128 bits or 16 bytes.  Used easy HEX values so you can plug them
     //  into a website like http://aes.online-domain-tools.com/ to verify encrypted values.
     //
     private static final byte[] FIXED_128BIT_IV_FOR_TESTS =
