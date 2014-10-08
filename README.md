@@ -28,7 +28,8 @@ CloudHSM version at the time of this writing is 5.1.2-2 so I am unable to
 confirm.**
 
 **Update 2: Amazon says they can update CloudHSM instances to firmware
-5.3.1.  I'll update this REAMDE again in a few weeks after trying it.**
+5.3.1.  I'll update this REAMDE again in a few months after I get sign-off on
+upgrading and try the updated firmware.**
 http://docs.aws.amazon.com/cloudhsm/latest/upgrade/cloud-hsm-upgrade-guide.html
 
 
