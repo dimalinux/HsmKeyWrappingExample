@@ -3,10 +3,14 @@ apply plugin: 'eclipse'
 
 tasks.eclipse.dependsOn(cleanEclipse)
 
+String LUNA_LIB_DIR = '/usr/safenet/lunaclient/jsp/lib/'
+
 mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingExample'
 //mainClassName = 'to.noc.hsm.lunasa.example.WrappedKeySerializationExample'
 //mainClassName = 'to.noc.hsm.lunasa.example.KeyWrappingWithHsmGeneratedKeysExample'
 sourceCompatibility = '1.7'
+
+applicationDefaultJvmArgs = ["-D=java.library.path=$LUNA_LIB_DIR"]
 
 repositories {
     mavenCentral()
@@ -15,9 +19,10 @@ repositories {
 dependencies {
     compile 'com.google.guava:guava:18.0'              // provides Bytes.indexOf
     compile 'org.apache.commons:commons-lang3:3.3.2'   // provides SerializationUtils
-    compile fileTree(dir: '/usr/lunasa/jsp/lib/', include: 'LunaProvider.jar')
+    compile fileTree(dir: LUNA_LIB_DIR, include: 'LunaProvider.jar')
 }
 
 run {
-    systemProperty 'java.library.path', '/usr/lunasa/jsp/lib/'
+   systemProperty 'java.library.path', LUNA_LIB_DIR 
 }
+
