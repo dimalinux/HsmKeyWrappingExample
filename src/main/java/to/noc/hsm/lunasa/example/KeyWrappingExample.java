@@ -1,5 +1,7 @@
 package to.noc.hsm.lunasa.example;
 
+import com.safenetinc.luna.LunaAPI;
+import com.safenetinc.luna.LunaTokenObject;
 import com.safenetinc.luna.LunaUtils;
 import com.safenetinc.luna.provider.key.LunaSecretKey;
 
@@ -9,45 +11,17 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.security.SecureRandom;
 
 import static java.lang.System.out;
 
 /*
- *  Example of how to use encrypted host keys with the Luna SA cryptographic provider.
- *  Unfortunately, this example also shows that the AWS CloudHSM device is not protecting
- *  keys that were unwrapped on the HSM from extraction.  An attacker gaining access to
- *  both your database (with encrypted host keys) and access to your HSM client host can
- *  easily and quickly convert all encrypted host keys into their unencrypted form.
- *
- *  Sample output from the code below:
- *
- *   HSM KEK ID (a handle, not in clear):
- *       0x0000000000000011
- *
- *   Software-Only 3DES Key (in the clear):
- *       0x835B7534DC266DA22646E3DF3D5D7A6B4A348FCB2F67DA76
- *
- *   KEK wrapped 3DES key (host key):
- *       0x511382325E89988B500DA3F9DFF5A53CCECF63B445A68450F426EC83464493E4
- *
- *   Stopping and starting session with HSM.
- *   Pretend that the host key was stored and restored from a database while disconnected
- *
- *   Unwrapped 3DES key is same as original (in clear):
- *       0x835B7534DC266DA22646E3DF3D5D7A6B4A348FCB2F67DA76
- *
- *   Class of unwrapped key: com.safenetinc.luna.provider.key.LunaSecretKey
- *
- *   Original plaintext:
- *       12345678
- *
- *   SunJCE encryption result:
- *       0x11559F95F6E862AF
- *
- *   LunaProvider HSM decrypt result:
- *       12345678
-*/
+ *  Example of how to use encrypted host keys with the cryptographic provider for the
+ *  Luna SA HSM.  This code was tested with firmware 5.3.5.  5.1.2, the original
+ *  version we started with, allowed key extraction of keys unwrapped on the HSM.
+ *  Use a 5.3 version if you want to use encrypted host keys!
+ */
 public class KeyWrappingExample {
     //
     // Alias used to store the the KEK (Key Encryption Key) on the HSM
@@ -66,18 +40,17 @@ public class KeyWrappingExample {
             LunaUtils.hexStringToByteArray("DEADD00D8BADF00DDEADBABED15EA5ED");
 
 
-
     public static void main(String[] args) throws Exception {
         final String hostKeyType = "DESede";
 
-        HsmManager.login();
-        HsmManager.setSecretKeysExtractable(false);
+        //HsmManager.login();
+        //HsmManager.setSecretKeysExtractable(false);
 
         SecretKey kek = createNewHsmKek();
         out.println("HSM KEK ID (a handle, not in clear):\n\t" + getHex(kek.getEncoded()));
 
         SecretKey des3Key = createSoftwareKey(hostKeyType);
-        out.println("Software-Only 3DES Key (in the clear):\n\t" + getHex(des3Key.getEncoded()));
+        out.println("Original unwrapped 3DES Key (in the clear):\n\t" + getHex(des3Key.getEncoded()));
 
         byte[] wrappedHostKey = wrapKeyWithKek(kek, des3Key);
         out.println("KEK wrapped 3DES key (host key):\n\t" + getHex(wrappedHostKey));
@@ -92,30 +65,43 @@ public class KeyWrappingExample {
 
         kek = getExistingHsmKek();
         SecretKey unwrapped3DesKey = unwrapKeyWithKek(kek, hostKeyType, wrappedHostKey);
-        out.println("Unwrapped 3DES key is same as original (in clear):\n\t" + getHex(unwrapped3DesKey.getEncoded()));
+        out.println("Unwrapped 3DES key is a reference to the HSM key (i.e. not in clear):\n\t" + getHex(unwrapped3DesKey.getEncoded()));
         out.println("Class of unwrapped key: " + unwrapped3DesKey.getClass().getCanonicalName());
 
-        //
-        //  Give an example using using the unwrapped LunaSecretKey in both a software
-        //  cipher operation and an HSM cipher operation.  If the LunaSecretKey was
-        //  protected in hardware, the SunJCE operation with it would fail.
-        //
+
         String plainText = "12345678";
-        byte[] plainTextBytes = plainText.getBytes();
         out.println("Original plaintext:\n\t" + plainText);
 
-        //  Start software cipher operation
-        Cipher sunJceCipher = Cipher.getInstance("DESede/ECB/NoPadding", "SunJCE");
-        sunJceCipher.init(Cipher.ENCRYPT_MODE, unwrapped3DesKey);
-        byte[] cipherText = sunJceCipher.doFinal(plainText.getBytes());
-        out.println("SunJCE encryption result:\n\t" + getHex(cipherText));
+        try {
+            // Prove that the unwrapped (on the HSM) key can not be used locally.  With the broken
+            // Luna SA 5.1.2 firmware this was possible, but with 5.3.5 we are correctly triggering
+            // an exception.
+            Cipher sunJceCipher = Cipher.getInstance("DESede/ECB/NoPadding", "SunJCE");
+            sunJceCipher.init(Cipher.ENCRYPT_MODE, unwrapped3DesKey);
+            out.println("ERROR:  This line should have been skipped by an invalid key exception.");
+        } catch (InvalidKeyException e) {
+            out.println("Unwrapped (on the HSM) key was not available for local use (desired).");
+        }
 
         //  Start Luna HSM cipher operation
         Cipher lunaHsmCipher = Cipher.getInstance("DESede/ECB/NoPadding", "LunaProvider");
+
+        lunaHsmCipher.init(Cipher.ENCRYPT_MODE, unwrapped3DesKey);
+        byte[] cipherText = lunaHsmCipher.doFinal(plainText.getBytes());
+        out.println("LunaProvider encrypt result in hex:\n\t" + getHex(cipherText));
+
         lunaHsmCipher.init(Cipher.DECRYPT_MODE, unwrapped3DesKey);
         byte[] originalClearText = lunaHsmCipher.doFinal(cipherText);
-        out.println("LunaProvider HSM decrypt result:\n\t" + new String(originalClearText));
+        out.println("LunaProvider decrypt result:\n\t" + new String(originalClearText));
 
+
+
+        Cipher wrappingCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "LunaProvider");
+        AlgorithmParameters algParams = AlgorithmParameters.getInstance("IV", "LunaProvider");
+        algParams.init(new IvParameterSpec(FIXED_128BIT_IV_FOR_TESTS));
+        wrappingCipher.init(Cipher.DECRYPT_MODE, kek, algParams);
+        byte[] unwrapped3DesKeyInClear = lunaHsmCipher.doFinal(wrappedHostKey);
+        out.println("Sneaky unwrap result:\n\t" + getHex(unwrapped3DesKeyInClear));
 
         HsmManager.logout();
     }
@@ -137,16 +123,9 @@ public class KeyWrappingExample {
         LunaSecretKey kek = (LunaSecretKey) kg.generateKey();
 
         //
-        //  Since our KEK will only be used for wrap and unwrap operations, we should
-        //  disable encryption and decryption operations.
-        //
-        //  Note:  In theory, the commented out lines below will work on Luna SA
-        //         firmwares 5.2 and above, but on our AWS CloudHSM firmware disabling
-        //         encrypt and decrypt functionality will disable Cipher.WRAP_MODE
-        //         and Cipher.UNWRAP_MODE respectively.  This is makes sense.
-        //         If the unwrapped keys are not stored and protected on the HSM,
-        //         wrapping and unwrapping operations *are* providing somewhat general
-        //         encrypt and decrypt functionality.
+        //  The Safenet sales engineer suggested we set the values below on a
+        //  KEK.  It doesn't work though.  Disabling CKA_ENCRYPT disables wrap()
+        //  operations and disabling CKA_DECRYPT disables unwrap() operations.
         //
         //LunaTokenObject obj = LunaTokenObject.LocateObjectByHandle(kek.GetKeyHandle());
         //obj.SetBooleanAttribute(LunaAPI.CKA_ENCRYPT, false);

@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
-import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.Properties;
 
@@ -20,14 +19,14 @@ import java.util.Properties;
  *
  */
 public class HsmManager {
-    private static final LunaSlotManager slotManager;
+    //private static final LunaSlotManager slotManager;
     private static KeyStore keyStore;
     private static final String partitionName;
     private static final String partitionPass;
     
     static {
         Security.addProvider(new com.safenetinc.luna.provider.LunaProvider());
-        slotManager = LunaSlotManager.getInstance();
+        //slotManager = LunaSlotManager.getInstance();
 
         Properties prop = new Properties();
         try {
@@ -50,19 +49,20 @@ public class HsmManager {
     }
 
     public static void login() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
-        slotManager.login(partitionName, partitionPass);
+        //slotManager.setDefaultSlot(1);
+        //slotManager.setApplicationId(0, 0);
+        //slotManager.login(partitionName, partitionPass);
         keyStore = KeyStore.getInstance("Luna");
         keyStore.load(null, null);
     }
 
     public static void logout() {
-        slotManager.logout();
+        //slotManager.logout();
         keyStore = null;
     }
     
     public static boolean hasSavedKey(String alias) throws KeyStoreException {
-        // I think the second check alone is sufficient
-        return keyStore.containsAlias(alias) && keyStore.isKeyEntry(alias);
+        return keyStore.isKeyEntry(alias);
     }
     
     public static Key getSavedKey(String alias) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException {
@@ -73,16 +73,16 @@ public class HsmManager {
         keyStore.setKeyEntry(alias, key, null, null);
     }
 
-    public static void saveRsaKey(String alias, Key key, Certificate[] chain) throws KeyStoreException {
-        keyStore.setKeyEntry(alias, key, null, chain);
-    }
+    //public static void saveRsaKey(String alias, Key key, Certificate[] chain) throws KeyStoreException {
+    //    keyStore.setKeyEntry(alias, key, null, chain);
+    //}
     
     public static void deleteKey(String alias) throws KeyStoreException {
         keyStore.deleteEntry(alias);
     }
 
     public static void setSecretKeysExtractable(boolean isExtractable) {
-        slotManager.setSecretKeysExtractable(isExtractable);
+        //slotManager.setSecretKeysExtractable(isExtractable);
     }
     
 }
