@@ -1,7 +1,5 @@
 package to.noc.hsm.lunasa.example;
 
-import com.safenetinc.luna.LunaSlotManager;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,7 +1,5 @@
 package to.noc.hsm.lunasa.example;
 
-import com.safenetinc.luna.LunaAPI;
-import com.safenetinc.luna.LunaTokenObject;
 import com.safenetinc.luna.LunaUtils;
 import com.safenetinc.luna.provider.key.LunaSecretKey;
 
@@ -21,6 +19,28 @@ import static java.lang.System.out;
  *  Luna SA HSM.  This code was tested with firmware 5.3.5.  5.1.2, the original
  *  version we started with, allowed key extraction of keys unwrapped on the HSM.
  *  Use a 5.3 version if you want to use encrypted host keys!
+ *
+ *  Example output:
+ *   HSM KEK ID (a handle, not in clear):
+ *   	0x0000000000000030
+ *   Original unwrapped 3DES Key (in the clear):
+ *   	0xFD100BC7E5DA769E2F7083AE5DF7E02FDCC13445C162077A
+ *   KEK wrapped 3DES key (host key):
+ *   	0x1BA43DE7C5A6D63787C37034A6B2F20626594FCC59F236E12DC0A9110EB43D42
+ *
+ *   Stopping and starting session with HSM.
+ *   Pretend that the host key was stored and restored from a database while disconnected
+ *
+ *   Unwrapped 3DES key is a reference to the HSM key (i.e. not in clear):
+ *   	0x0000000000000034
+ *   Class of unwrapped key: com.safenetinc.luna.provider.key.LunaSecretKey
+ *   Original plaintext:
+ *   	12345678
+ *   Unwrapped (on the HSM) key was not available for local use (desired).
+ *   LunaProvider encrypt result in hex:
+ *   	0xC7403FC98BEEC004
+ *   LunaProvider decrypt result:
+ *   	12345678
  */
 public class KeyWrappingExample {
     //
@@ -43,7 +63,7 @@ public class KeyWrappingExample {
     public static void main(String[] args) throws Exception {
         final String hostKeyType = "DESede";
 
-        //HsmManager.login();
+        HsmManager.login();
         //HsmManager.setSecretKeysExtractable(false);
 
         SecretKey kek = createNewHsmKek();
@@ -94,7 +114,9 @@ public class KeyWrappingExample {
         byte[] originalClearText = lunaHsmCipher.doFinal(cipherText);
         out.println("LunaProvider decrypt result:\n\t" + new String(originalClearText));
 
-
+        /*
+           TBD:  See if we can get around the system my unwrapping the key using crypto
+                 operations.
 
         Cipher wrappingCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "LunaProvider");
         AlgorithmParameters algParams = AlgorithmParameters.getInstance("IV", "LunaProvider");
@@ -102,6 +124,7 @@ public class KeyWrappingExample {
         wrappingCipher.init(Cipher.DECRYPT_MODE, kek, algParams);
         byte[] unwrapped3DesKeyInClear = lunaHsmCipher.doFinal(wrappedHostKey);
         out.println("Sneaky unwrap result:\n\t" + getHex(unwrapped3DesKeyInClear));
+        */
 
         HsmManager.logout();
     }
